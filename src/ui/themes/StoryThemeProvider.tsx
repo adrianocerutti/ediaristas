@@ -5,7 +5,7 @@ import theme from "./theme";
 
 const StoryThemeProvider = (storyFn: any) => (
 	<ThemeProvider theme={theme}>
-		<EmotionThemeProvider theme={theme}>{storyFn}</EmotionThemeProvider>
+		<EmotionThemeProvider theme={theme}>{storyFn()}</EmotionThemeProvider>
 	</ThemeProvider>
 );
 

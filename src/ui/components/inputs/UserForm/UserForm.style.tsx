@@ -45,6 +45,24 @@ export const NewContactData = styled(BaseGrid)`
     }
 `;
 
+export const PaymentData = styled(BaseGrid)`
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+        'numero numero'
+        'nome nome'
+        'validade codigo'
+        'erro erro';
+
+    ${({ theme }) => theme.breakpoints.down('md')} {
+        grid-template-areas:
+            'numero'
+            'nome'
+            'validade'
+            'codigo'
+            'erro';
+    }
+`;
+
 export const PictureSelection = styled(BaseGrid)`
     grid-template-columns: 1fr;
     padding: 0;

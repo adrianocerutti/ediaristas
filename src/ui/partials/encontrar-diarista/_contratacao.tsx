@@ -8,12 +8,15 @@ import SafeEnvironment from 'ui/components/feedback/SafeEnvironment/SafeEnvironm
 import { UserFormContainer } from 'ui/components/inputs/UserForm/UserForm';
 import { PageFormContainer } from 'ui/components/inputs/UserForm/UserForm.style';
 import Breadcrumb from 'ui/components/navigation/Breadcrumb/Breadcrumb';
+import { FormProvider } from 'react-hook-form';
+import DetalhesServico from './_detalhes-servico';
 
 // import { Component } from './_contratacao.styled';
 
 const Contratacao: React.FC = () => {
     const isMobile = useIsMobile(),
-        { step, breadcrumbItems } = useContratacao();
+        { step, breadcrumbItems, serviceForm, onServiceFormSubmit, servicos } =
+            useContratacao();
     return (
         <div>
             {!isMobile && <SafeEnvironment />}
@@ -28,8 +31,17 @@ const Contratacao: React.FC = () => {
 
             <UserFormContainer>
                 <PageFormContainer fullWidth={step === 4}>
-                    <Paper sx={{ p: 4 }}></Paper>
-
+                    <Paper sx={{ p: 4 }}>
+                        <FormProvider {...serviceForm}>
+                            <form
+                                onSubmit={serviceForm.handleSubmit(
+                                    onServiceFormSubmit
+                                )}
+                            >
+                                <DetalhesServico servicos={servicos} />
+                            </form>
+                        </FormProvider>
+                    </Paper>
                     <SideInformation
                         title={'Detalhes'}
                         items={[

@@ -1,10 +1,12 @@
 import { Button, Container, Divider, Typography } from '@material-ui/core';
 import React from 'react';
 import {
+    LoginForm,
     NewContactForm,
     PictureForm,
     UserDataForm,
 } from 'ui/components/inputs/UserForm/UserForm';
+import { LoginButtonsContainer } from './_cadastro-cliente.styled';
 
 // import { Component } from './_cadastro-cliente.styled';
 
@@ -51,6 +53,32 @@ const CadastroCliente: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     Ir para pagamento
                 </Button>
             </Container>
+        </>
+    );
+};
+
+export const LoginCliente: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+    return (
+        <>
+            <LoginForm />
+            <LoginButtonsContainer>
+                <Button
+                    variant={'outlined'}
+                    color={'primary'}
+                    type={'button'}
+                    onClick={onBack}
+                >
+                    Voltar para detalhes da diária
+                </Button>
+
+                <Button
+                    variant={'contained'}
+                    color={'secondary'}
+                    type={'submit'}
+                >
+                    Ir para pagamento
+                </Button>
+            </LoginButtonsContainer>
         </>
     );
 };

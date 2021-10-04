@@ -1,5 +1,5 @@
-import React from 'react';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from 'data/context/UserContext';
 import { useFormContext, Controller } from 'react-hook-form';
 import TextField from '../../TextField/TextField';
 import TextFieldMask from '../../TextFieldMask/TextFieldMask';
@@ -13,10 +13,11 @@ export const UserDataForm: React.FC<UserDataFormProps> = ({
     cadastro = false,
 }) => {
     const {
-        register,
-        formState: { errors },
-        control,
-    } = useFormContext();
+            register,
+            formState: { errors },
+            control,
+        } = useFormContext(),
+        { user } = useContext(UserContext).userState;
 
     return (
         <UserData>

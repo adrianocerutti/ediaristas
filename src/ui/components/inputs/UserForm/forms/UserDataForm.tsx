@@ -4,6 +4,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import TextField from '../../TextField/TextField';
 import TextFieldMask from '../../TextFieldMask/TextFieldMask';
 import { UserData } from '../UserForm.style';
+import { TextFormatService } from 'data/services/TextFormatService';
 
 export interface UserDataFormProps {
     cadastro?: boolean;
@@ -23,7 +24,7 @@ export const UserDataForm: React.FC<UserDataFormProps> = ({
         <UserData>
             <TextField
                 label={'Nome Completo'}
-                defaultValue={''}
+                defaultValue={user.nome_completo}
                 style={{ gridArea: 'nome' }}
                 {...register('usuario.nome_completo')}
                 error={errors?.usuario?.nome_completo !== undefined}
@@ -32,7 +33,9 @@ export const UserDataForm: React.FC<UserDataFormProps> = ({
 
             <Controller
                 name={'usuario.nascimento'}
-                defaultValue={''}
+                defaultValue={TextFormatService.reverseDate(
+                    user.nascimento as string
+                )}
                 control={control}
                 render={({ field: { ref, ...inputProps } }) => (
                     <TextFieldMask
@@ -48,7 +51,7 @@ export const UserDataForm: React.FC<UserDataFormProps> = ({
 
             <Controller
                 name={'usuario.cpf'}
-                defaultValue={''}
+                defaultValue={user.cpf}
                 control={control}
                 render={({ field: { ref, ...inputProps } }) => (
                     <TextFieldMask
@@ -65,7 +68,7 @@ export const UserDataForm: React.FC<UserDataFormProps> = ({
 
             <Controller
                 name={'usuario.telefone'}
-                defaultValue={''}
+                defaultValue={user.telefone}
                 control={control}
                 render={({ field: { ref, ...inputProps } }) => (
                     <TextFieldMask

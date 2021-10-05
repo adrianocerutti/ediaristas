@@ -9,7 +9,7 @@ const initialValue: UserReducerInterface = {
     userState: initialState,
     userDispatch: () => {},
 };
-export const UserContext = createContext({ initialValue });
+export const UserContext = createContext(initialValue);
 
 export const UserProvider: React.FC = ({ children }) => {
     const reducer = useUserReducer();

@@ -1,3 +1,8 @@
+const CurrencyFormatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+});
+
 export const TextFormatService = {
     reverseDate(date: string): string {
         if (date.includes('/')) {
@@ -8,5 +13,11 @@ export const TextFormatService = {
             [date] = date.split('T');
         }
         return date.split('-').reverse().join('/');
+    },
+    currency(price = 0): string {
+        if (isNaN(price)) {
+            price = 0;
+        }
+        return CurrencyFormatter.format(price);
     },
 };

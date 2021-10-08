@@ -52,16 +52,29 @@ export default function useContratacao() {
                 }
             }
             return {} as ServicoInterface;
-        }, [servicos, dadosFaxina]),
-        tamanhoCasa = useMemo<string[]>(() => {
-            return listarComodos(dadosFaxina);
-        }, [tipoLimpeza, dadosFaxina]),
-        totalPrice = useMemo<number>(() => {
-            return calcularPreco(dadosFaxina, tipoLimpeza);
-        }, [tipoLimpeza, dadosFaxina]),
-        totalTime = useMemo<number>(() => {
-            return calcularTempoServico(dadosFaxina, tipoLimpeza);
-        }, [dadosFaxina, tipoLimpeza]);
+        }, [servicos, dadosFaxina?.servico]),
+        { tamanhoCasa, totalPrice, totalTime } = useMemo<{
+            tamanhoCasa: string[];
+            totalPrice: number;
+            totalTime: number;
+        }>(
+            () => ({
+                tamanhoCasa: listarComodos(dadosFaxina),
+                totalPrice: calcularPreco(dadosFaxina, tipoLimpeza),
+                totalTime: calcularTempoServico(dadosFaxina, tipoLimpeza),
+            }),
+            /* eslint-disable react-hooks/exhaustive-deps */
+            [
+                tipoLimpeza,
+                dadosFaxina,
+                dadosFaxina?.quantidade_banheiros,
+                dadosFaxina?.quantidade_cozinhas,
+                dadosFaxina?.quantidade_outros,
+                dadosFaxina?.quantidade_quartos,
+                dadosFaxina?.quantidade_quintais,
+                dadosFaxina?.quantidade_salas,
+            ]
+        );
 
     useEffect(() => {
         if (

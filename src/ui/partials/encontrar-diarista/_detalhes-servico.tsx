@@ -43,7 +43,7 @@ export const houseParts = [
     {
         singular: 'Quarto',
         plural: 'Quartos',
-        name: 'quantidade_quarto',
+        name: 'quantidade_quartos',
     },
     {
         singular: 'Quintal',

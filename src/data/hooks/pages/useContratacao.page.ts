@@ -1,7 +1,8 @@
+import { ExternalServicesContext } from './../../context/ExternalServicesContext';
 import { houseParts } from './../../../ui/partials/encontrar-diarista/_detalhes-servico';
 import { DateService } from './../../services/DateService';
 import { ValidationService } from './../../services/ValidationService';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormSchemaService } from 'data/services/FormSchemaService';
@@ -14,6 +15,7 @@ import {
 import { ServicoInterface } from 'data/@types/ServicoInterface';
 import useApi from '../useApi.hook';
 import { DiariaInterface } from './../../@types/DiariaInterface';
+import { ApiService, linksResolver } from 'data/services/ApiService';
 
 export default function useContratacao() {
     const [step, setStep] = useState(1),
@@ -40,8 +42,11 @@ export default function useContratacao() {
         loginForm = useForm<LoginFormDataInterface>({
             resolver: yupResolver(FormSchemaService.login()),
         }),
+        { externalServicesState } = useContext(ExternalServicesContext),
         servicos = useApi<ServicoInterface[]>('/api/servicos').data,
         dadosFaxina = serviceForm.watch('faxina'),
+        cepFaxina = serviceForm.watch('endereco.cep'),
+        [podemosAtender, setPodemosAtender] = useState(true),
         tipoLimpeza = useMemo<ServicoInterface>(() => {
             if (servicos && dadosFaxina?.servico) {
                 const selectedService = servicos.find(
@@ -94,6 +99,32 @@ export default function useContratacao() {
             serviceForm.setValue('faxina.hora_termino', '');
         }
     }, [dadosFaxina?.hora_inicio, totalTime]);
+
+    useEffect(() => {
+        const cep = ((cepFaxina as string) || '').replace(/\D/g, '');
+        if (ValidationService.cep(cep)) {
+            externalServicesState.externalServices[0];
+            //'verificar_disponibilidade_atendimento'
+
+            const linkDisponibilidade = linksResolver(
+                externalServicesState.externalServices,
+                'verificar_disponibilidade_atendimento'
+            );
+
+            if (linkDisponibilidade) {
+                ApiService.request<{ disponibilidade: boolean }>({
+                    url: linkDisponibilidade.uri + '?cep=' + cep,
+                    method: linkDisponibilidade.type,
+                })
+                    .then((response) => {
+                        setPodemosAtender(response.data.disponibilidade);
+                    })
+                    .catch((_error) => setPodemosAtender(false));
+            }
+        } else {
+            setPodemosAtender(true);
+        }
+    }, [cepFaxina]);
 
     function onServiceFormSubmit(data: NovaDiariaFormDataInterface) {
         console.log(data);
@@ -180,6 +211,7 @@ export default function useContratacao() {
         onPaymentFormSubmit,
         onLoginFormSubmit,
         servicos,
+        podemosAtender,
         hasLogin,
         tipoLimpeza,
         totalPrice,

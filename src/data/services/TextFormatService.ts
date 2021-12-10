@@ -14,6 +14,18 @@ export const TextFormatService = {
         }
         return date.split('-').reverse().join('/');
     },
+    dateToString(date: Date, withTime = false): string{
+        const time = date.toISOString();
+        '2000-00-00T00:00:00Z'
+
+        if(withTime){
+            return time.substring(0, 19);
+        }
+        return time.substring(0, 10);
+    },
+    getNumbersFromText(text = ''): string {
+        return text.replace(/\D/g, '');
+    },
     currency(price = 0): string {
         if (isNaN(price)) {
             price = 0;
